@@ -3,4 +3,5 @@
 
 @interface Recording : RCTEventEmitter <RCTBridgeModule>
 - (void)processInputBuffer:(AudioQueueBufferRef)inBuffer queue:(AudioQueueRef)queue;
+- (void)startNew;
 @end
