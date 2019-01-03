@@ -148,7 +148,7 @@ RCT_EXPORT_METHOD(stop) {
         index++;
     }
     dispatch_sync(dispatch_get_main_queue(), ^{
-        [demodulatedDataArray addObject:[demodulatedData copy]];
+        [demodulatedDataArray addObjectsFromArray:[demodulatedData copy]];
     });
     return demodulatedData;
 }
@@ -172,84 +172,84 @@ RCT_EXPORT_METHOD(stop) {
     int threshold = initialThreshold, eventCount = 0,
     maxSig, minSig, hold, stateTwoCnt;
     
-    for (NSArray *element in demodulatedData) {
-        for (NSNumber *valueNumber in element) {
-            int value = [valueNumber intValue];
-            switch (currentState) {
-                case FindFirst:
-                    if (value > threshold) {
-                        threshold = value;
-                        eventCount++;
-                        currentState = Wait;
-                        maxSig = 0;
-                        minSig = 10000;
-                        hold = 0;
-                    }
-                    break;
-                    
-                case Wait:
-                    if ((hold > holdCnt - 3) && (value > maxSig)) { maxSig = value; }
-                    if (value < minSig) { minSig = value; }
-                    
-                    hold++;
-                    
-                    if (hold > holdCnt) {
-                        currentState = FindEventStart;
-                    }
-                    
-                    stateTwoCnt = 0;
-                    
-                    if (value > threshold) {
-                        threshold = value;
-                    }
-                    threshold = threshold < initialThreshold ? initialThreshold : threshold * thresholdDecayRate;
-                    break;
-                    
-                case FindEventStart:
-                    stateTwoCnt++;
-                    if (stateTwoCnt > stateTwoLimit) {
-                        maxSig = 0;
-                        currentState = FindFirst;
-                    } else {
-                        if (value > maxSig) {
-                            maxSig = value;
-                        }
-                        if (value < minSig) {
-                            minSig = value;
-                        }
-                        if (value < threshold) {
-                            threshold = threshold < initialThreshold ? initialThreshold : threshold * thresholdDecayRate;
-                        } else {
-                            threshold = value;
-                            currentState = EventTop;
-                        }
-                    }
-                    break;
-                    
-                case EventTop:
+    //for (NSArray *element in demodulatedData) {
+    for (NSNumber *valueNumber in demodulatedData) {
+        int value = [valueNumber intValue];
+        switch (currentState) {
+            case FindFirst:
+                if (value > threshold) {
+                    threshold = value;
+                    eventCount++;
+                    currentState = Wait;
+                    maxSig = 0;
+                    minSig = 10000;
+                    hold = 0;
+                }
+                break;
+                
+            case Wait:
+                if ((hold > holdCnt - 3) && (value > maxSig)) { maxSig = value; }
+                if (value < minSig) { minSig = value; }
+                
+                hold++;
+                
+                if (hold > holdCnt) {
+                    currentState = FindEventStart;
+                }
+                
+                stateTwoCnt = 0;
+                
+                if (value > threshold) {
+                    threshold = value;
+                }
+                threshold = threshold < initialThreshold ? initialThreshold : threshold * thresholdDecayRate;
+                break;
+                
+            case FindEventStart:
+                stateTwoCnt++;
+                if (stateTwoCnt > stateTwoLimit) {
+                    maxSig = 0;
+                    currentState = FindFirst;
+                } else {
                     if (value > maxSig) {
                         maxSig = value;
                     }
                     if (value < minSig) {
                         minSig = value;
                     }
-                    if (value > threshold) {
-                        threshold = value;
+                    if (value < threshold) {
+                        threshold = threshold < initialThreshold ? initialThreshold : threshold * thresholdDecayRate;
                     } else {
-                        if (maxSig - minSig >= eventSize) { eventCount++; }
-                        
-                        currentState = Wait;
-                        maxSig = 0;
-                        minSig = 10000;
-                        hold = 0;
+                        threshold = value;
+                        currentState = EventTop;
                     }
-                    break;
+                }
+                break;
+                
+            case EventTop:
+                if (value > maxSig) {
+                    maxSig = value;
+                }
+                if (value < minSig) {
+                    minSig = value;
+                }
+                if (value > threshold) {
+                    threshold = value;
+                } else {
+                    if (maxSig - minSig >= eventSize) { eventCount++; }
                     
-                default:
-                    break;
-            }
+                    currentState = Wait;
+                    maxSig = 0;
+                    minSig = 10000;
+                    hold = 0;
+                }
+                break;
+                
+            default:
+                break;
         }
     }
+//    }
     NSLog(@"Events count = %d", eventCount);
     return eventCount;
 }
