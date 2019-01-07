@@ -1,9 +1,0 @@
-.idea/
-.gradle/
-node_modules/
-build/
-xcuserdata/
-project.xcworkspace/
-
-*.iml
-local.properties

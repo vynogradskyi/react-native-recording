@@ -20,12 +20,12 @@ NSMutableArray *demodulatedDataArray;
 NSMutableArray *demodulatedDataArrayOneMinute;
 
 void inputCallback(
-        void *inUserData,
-        AudioQueueRef inAQ,
-        AudioQueueBufferRef inBuffer,
-        const AudioTimeStamp *inStartTime,
-        UInt32 inNumberPacketDescriptions,
-        const AudioStreamPacketDescription *inPacketDescs) {
+                   void *inUserData,
+                   AudioQueueRef inAQ,
+                   AudioQueueBufferRef inBuffer,
+                   const AudioTimeStamp *inStartTime,
+                   UInt32 inNumberPacketDescriptions,
+                   const AudioStreamPacketDescription *inPacketDescs) {
     [(__bridge Recording *) inUserData processInputBuffer:inBuffer queue:inAQ];
 }
 
@@ -36,7 +36,7 @@ RCT_EXPORT_METHOD(init:(NSDictionary *) options) {
     _bufferSize = bufferSize;
     downsampleFactor = options[@"downsampleFactor"] == nil ? 32 : [options[@"downsampleFactor"] unsignedIntegerValue];
     demodulateIndex = options[@"demodulateIndex"] == nil ? 138 : [options[@"demodulateIndex"] unsignedIntegerValue];
-
+    
     AudioStreamBasicDescription description;
     description.mReserved = 0;
     description.mSampleRate = options[@"sampleRate"] == nil ? 44100 : [options[@"sampleRate"] doubleValue];
@@ -47,7 +47,7 @@ RCT_EXPORT_METHOD(init:(NSDictionary *) options) {
     description.mBytesPerPacket = options[@"bytesPerPacket"] == nil ? 2 : [options[@"bytesPerPacket"] unsignedIntegerValue];
     description.mFormatID = kAudioFormatLinearPCM;
     description.mFormatFlags = kAudioFormatFlagIsSignedInteger;
-
+    
     AudioQueueNewInput(&description, inputCallback, (__bridge void *) self, NULL, NULL, 0, &_queue);
     AudioQueueAllocateBuffer(_queue, (UInt32) (bufferSize * 2), &_buffer);
     AudioQueueEnqueueBuffer(_queue, _buffer, 0, NULL);
@@ -66,7 +66,7 @@ RCT_EXPORT_METHOD(init:(NSDictionary *) options) {
     }
     else {
         downsampleTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self
-            selector:@selector(sendDownSampledData) userInfo:nil repeats:YES];
+                                                         selector:@selector(sendDownSampledData) userInfo:nil repeats:YES];
         demodulateTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(sendDemodulatedData) userInfo:nil repeats:YES];
         countEventsTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(sendCountEventsData) userInfo:nil repeats:YES];
     }
@@ -95,7 +95,7 @@ RCT_EXPORT_METHOD(stop) {
     }
     NSArray * array = [NSArray arrayWithObjects:_audioData count:count];
     [self downsampleData:[array copy]];
-
+    
     AudioQueueEnqueueBuffer(queue, inBuffer, 0, NULL);
 }
 
@@ -249,7 +249,7 @@ RCT_EXPORT_METHOD(stop) {
                 break;
         }
     }
-//    }
+    //    }
     NSLog(@"Events count = %d", eventCount);
     return eventCount;
 }
