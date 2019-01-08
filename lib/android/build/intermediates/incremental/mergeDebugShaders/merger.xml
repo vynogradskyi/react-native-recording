@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/vvinogradskiy/Work/eversleep/new/everSleep-React/node_modules/react-native-recording/lib/android/src/main/shaders"/></dataSet><dataSet config="debug"><source path="/Users/vvinogradskiy/Work/eversleep/new/everSleep-React/node_modules/react-native-recording/lib/android/src/debug/shaders"/></dataSet></merger>

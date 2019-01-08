@@ -115,7 +115,7 @@ class RecordingModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void start() {
+    public void startDownsample() {
         if (!running && audioRecord != null && recordingThread != null) {
             running = true;
             audioRecord.startRecording();
@@ -124,7 +124,7 @@ class RecordingModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startDownsample() {
+    public void start() {
         if (!running && audioRecord != null && recordingThread != null) {
             running = true;
             audioRecord.startRecording();
@@ -229,7 +229,7 @@ class RecordingModule extends ReactContextBaseJavaModule {
                 downsampleData[i] = data[i * factor];
             }
         if (shouldEmitEvent) {
-            eventEmitter.emit("downsample", arr);
+            eventEmitter.emit("downsampled", arr);
         }
 
         return downsampleData;
@@ -254,7 +254,7 @@ class RecordingModule extends ReactContextBaseJavaModule {
             index++;
         }
         if (shouldEmitEvent) {
-            eventEmitter.emit("demodulate", demodulatedData);
+            eventEmitter.emit("demodulated", demodulatedData);
         }
         return demodulData;
     }
@@ -349,7 +349,7 @@ class RecordingModule extends ReactContextBaseJavaModule {
                     break;
             }
         }
-        eventEmitter.emit("countevents", eventCount);
+        eventEmitter.emit("countEvents", eventCount);
     }
 
 }
