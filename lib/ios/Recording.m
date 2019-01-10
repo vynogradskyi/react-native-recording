@@ -59,14 +59,14 @@ RCT_EXPORT_METHOD(init:(NSDictionary *) options) {
     
     if (![NSThread isMainThread]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            downsampleTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(sendDownSampledData) userInfo:nil repeats:YES];
+            // downsampleTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(sendDownSampledData) userInfo:nil repeats:YES];
             demodulateTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(sendDemodulatedData) userInfo:nil repeats:YES];
             countEventsTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(sendCountEventsData) userInfo:nil repeats:YES];
         });
     }
     else {
-        downsampleTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self
-            selector:@selector(sendDownSampledData) userInfo:nil repeats:YES];
+        // downsampleTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self
+        //     selector:@selector(sendDownSampledData) userInfo:nil repeats:YES];
         demodulateTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(sendDemodulatedData) userInfo:nil repeats:YES];
         countEventsTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(sendCountEventsData) userInfo:nil repeats:YES];
     }
@@ -260,7 +260,7 @@ RCT_EXPORT_METHOD(stop) {
 
 - (void)dealloc {
     AudioQueueStop(_queue, YES);
-    [downsampleTimer invalidate];
+   // [downsampleTimer invalidate];
     [demodulateTimer invalidate];
     [countEventsTimer invalidate];
 }

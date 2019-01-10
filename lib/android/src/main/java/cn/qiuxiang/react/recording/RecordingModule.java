@@ -115,7 +115,7 @@ class RecordingModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startDownsample() {
+    public void startDemodulate() { //this is original start
         if (!running && audioRecord != null && recordingThread != null) {
             running = true;
             audioRecord.startRecording();
@@ -124,7 +124,7 @@ class RecordingModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void start() {
+    public void startDownsample() { 
         if (!running && audioRecord != null && recordingThread != null) {
             running = true;
             audioRecord.startRecording();
@@ -133,7 +133,7 @@ class RecordingModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startDemodulate() {
+    public void start() { //this is start Demodulate
         if (!running && audioRecord != null && recordingThread != null) {
             running = true;
             audioRecord.startRecording();
