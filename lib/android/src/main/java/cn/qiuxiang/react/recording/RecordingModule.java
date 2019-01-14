@@ -124,7 +124,7 @@ class RecordingModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void start() {
+    public void startCountEvents() { //that is original start
         if (!running && audioRecord != null && recordingThread != null) {
             running = true;
             audioRecord.startRecording();
@@ -142,7 +142,7 @@ class RecordingModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startCountEvents() {
+    public void start() { //that is Count Events start
         if (!running && audioRecord != null && recordingThread != null) {
             running = true;
             audioRecord.startRecording();
